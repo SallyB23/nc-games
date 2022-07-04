@@ -67,6 +67,28 @@ describe('GET /api/reviews/:review_id', () => {
     });
 });
 
+describe.only('GET /api/users', () => {
+    it('returns 200 status with array of all user objects each with properties username, name, avatar_url', () => {
+        return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({ body }) => {
+            const { users } = body
+            expect(users).toBeInstanceOf(Array)
+            expect(users).toHaveLength(4)
+            users.forEach((user) => {
+                expect(user).toEqual(
+                    expect.objectContaining({
+                        username: expect.any(String),
+                        name: expect.any(String),
+                        avatar_url: expect.any(String)
+                    })
+                )
+            })
+        })
+    });
+});
+
 describe('handling incorrect path errors', () => {
     it('returns 404 status with path not found error message when an incorrect path is input', () => {
         return request(app)
