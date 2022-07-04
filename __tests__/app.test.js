@@ -79,11 +79,21 @@ describe.only('PATCH /api/reviews/:review_id', () => {
         .then(({ body }) => {
             const { review } = body
             expect(review).toBeInstanceOf(Object)
-            expect(review).toContain({
-                review_id: 4,
-                title: "Dolor reprehenderit",
-                votes: 17
-            })
+            expect(review.votes).toBe(17)
+        })
+    });
+    it('returns 200 status code with the number of votes decreased in the updated object if the new vote number passed is a minus number', () => {
+        const voteUpdate = {
+            inc_votes: -17
+        }
+        return request(app)
+        .patch('/api/reviews/4')
+        .send(voteUpdate)
+        .expect(200)
+        .then(({ body }) => {
+            const { review } = body
+            expect(review).toBeInstanceOf(Object)
+            expect(review.votes).toBe(-10)
         })
     });
 });

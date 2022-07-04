@@ -16,5 +16,15 @@ exports.fetchReviewById = (id) => {
 }
 
 exports.updateReviewById = (id, updateInfo) => {
-    
+    const updateArr = [updateInfo.inc_votes, id]
+    return db
+    .query(
+        `UPDATE reviews
+        SET votes = votes + $1
+        WHERE review_id = $2
+        RETURNING *`, updateArr
+    )
+    .then(({ rows }) => {
+        return rows[0]
+    })
 }
