@@ -27,3 +27,14 @@ describe('GET /api/categories', () => {
         })
     });
 });
+
+describe('handling incorrect path errors', () => {
+    it('returns 404 status with path not found error message when an incorrect path is input', () => {
+        return request(app)
+        .get('/api/nonsense')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.error).toBe("path not found")
+        })
+    });
+});
