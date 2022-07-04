@@ -28,13 +28,52 @@ describe('GET /api/categories', () => {
     });
 });
 
+describe('GET /api/reviews/:review_id', () => {
+    it('return 200 status with a review object as a message', () => {
+        return request(app)
+        .get('/api/reviews/4')
+        .expect(200)
+        .then(({ body }) => {
+            const { review } = body
+            expect(review).toBeInstanceOf(Object)
+            expect(review).toEqual({
+                review_id: 4,
+                title: "Dolor reprehenderit",
+                review_body: expect.any(String),
+                designer: "Gamey McGameface",
+                review_img_url: expect.any(String),
+                votes: 7,
+                category: "social deduction",
+                owner: "mallionaire",
+                created_at: expect.any(String)
+            })
+        })
+    });
+    it('returns 404 status with a corresponding not found message', () => {
+        return request(app)
+        .get('/api/reviews/599')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("review_id not found")
+        })
+    });
+    it('return 400 status with a corresponding bad request message', () => {
+        return request(app)
+        .get('/api/reviews/banana')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+});
+
 describe('handling incorrect path errors', () => {
     it('returns 404 status with path not found error message when an incorrect path is input', () => {
         return request(app)
         .get('/api/nonsense')
         .expect(404)
         .then(({ body }) => {
-            expect(body.error).toBe("path not found")
+            expect(body.message).toBe("path not found")
         })
     });
 });
