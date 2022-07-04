@@ -45,7 +45,8 @@ describe('GET /api/reviews/:review_id', () => {
                 votes: 7,
                 category: "social deduction",
                 owner: "mallionaire",
-                created_at: expect.any(String)
+                created_at: expect.any(String),
+                comment_count: expect.any(Number)
             })
         })
     });
@@ -67,7 +68,7 @@ describe('GET /api/reviews/:review_id', () => {
     });
 });
 
-describe.only('PATCH /api/reviews/:review_id', () => {
+describe('PATCH /api/reviews/:review_id', () => {
     it('returns 200 status code with the number of votes increased in the updated object', () => {
         const voteUpdate = {
             inc_votes: 10
