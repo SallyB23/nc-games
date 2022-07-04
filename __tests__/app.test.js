@@ -38,7 +38,7 @@ describe.only('GET /api/reviews/:review_id', () => {
             expect(review).toBeInstanceOf(Object)
             expect(review).toEqual({
                 review_id: 4,
-                title: "Dolor reprehenderit ",
+                title: "Dolor reprehenderit",
                 review_body: expect.any(String),
                 designer: "Gamey McGameface",
                 review_img_url: expect.any(String),
