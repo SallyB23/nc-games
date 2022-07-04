@@ -62,7 +62,7 @@ describe('GET /api/reviews/:review_id', () => {
         .get('/api/reviews/banana')
         .expect(400)
         .then(({ body }) => {
-            expect(body.message).toBe("invalid input")
+            expect(body.message).toBe("Bad Request")
         })
     });
 });
