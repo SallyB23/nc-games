@@ -28,7 +28,7 @@ describe('GET /api/categories', () => {
     });
 });
 
-describe.only('GET /api/reviews/:review_id', () => {
+describe('GET /api/reviews/:review_id', () => {
     it('return 200 status with a review object as a message', () => {
         return request(app)
         .get('/api/reviews/4')
@@ -49,6 +49,22 @@ describe.only('GET /api/reviews/:review_id', () => {
             })
         })
     });
+    it('returns 404 status with a corresponding not found message', () => {
+        return request(app)
+        .get('/api/reviews/599')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("review_id not found")
+        })
+    });
+    it('return 400 status with a corresponding bad request message', () => {
+        return request(app)
+        .get('/api/reviews/banana')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("invalid input")
+        })
+    });
 });
 
 describe('handling incorrect path errors', () => {
@@ -57,7 +73,7 @@ describe('handling incorrect path errors', () => {
         .get('/api/nonsense')
         .expect(404)
         .then(({ body }) => {
-            expect(body.error).toBe("path not found")
+            expect(body.message).toBe("path not found")
         })
     });
 });
