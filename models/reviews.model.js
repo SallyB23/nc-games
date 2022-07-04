@@ -14,3 +14,21 @@ exports.fetchReviewById = (id) => {
 
     })
 }
+
+exports.updateReviewById = (id, updateInfo) => {
+    const updateArr = [updateInfo.inc_votes, id]
+    return db
+    .query(
+        `UPDATE reviews
+        SET votes = votes + $1
+        WHERE review_id = $2
+        RETURNING *`, updateArr
+    )
+    .then(({ rows }) => {
+        if(rows.length !== 0){
+            return rows[0] 
+        } else {
+            return Promise.reject({status: 404, message: "review_id not found"})
+        }
+    })
+}
