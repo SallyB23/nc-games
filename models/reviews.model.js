@@ -14,3 +14,7 @@ exports.fetchReviewById = id => {
 
     })
 }
+
+exports.updateReviewById = (id, updateInfo) => {
+    
+}
