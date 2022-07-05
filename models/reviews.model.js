@@ -15,7 +15,6 @@ exports.fetchReviewById = (id) => {
         } else {
             return Promise.reject({status: 404, message: "review_id not found"})
         }
-
     })
 }
 

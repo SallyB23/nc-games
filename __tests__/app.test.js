@@ -232,6 +232,32 @@ describe('GET /api/reviews/:review_id/comments', () => {
                 })
             })
         })
+    });    
+    it('returns 400 with bad request message when given id that is of invalid type', () => {
+        return request(app)
+        .get('/api/reviews/order/comments')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 404 with not found message when given an id that doesn\'t exist', () => {
+        return request(app)
+        .get('/api/reviews/66/comments')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("Resource not found")
+        })
+    });
+    it('returns 200 with an empty array if there are no comments for that id but the id exists', () => {
+        return request(app)
+        .get('/api/reviews/4/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            expect(comments).toBeInstanceOf(Array)
+            expect(comments).toHaveLength(0)
+        })
     });
 });
 

@@ -1,3 +1,4 @@
+const { checkExists } = require("../models/model-utils")
 const { fetchReviewById, updateReviewById, fetchReviews, fetchCommentsByReviewId } = require("../models/reviews.model")
 
 exports.getReviewById = (req, res, next) => {
@@ -26,11 +27,11 @@ exports.patchReviewById = (req, res, next) => {
 exports.getCommentsByReviewId = (req, res, next) => {
     const { review_id } = req.params
 
-    fetchCommentsByReviewId(review_id).then((comments) => {
+    Promise.all([fetchCommentsByReviewId(review_id), checkExists("reviews", "review_id", review_id)]).then(([ comments ]) => {
         res.status(200).send({ comments })
     })
     .catch(err => {
-        console.log(err)
+        next(err)
     })
 }
 
