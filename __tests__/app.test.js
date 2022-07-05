@@ -175,6 +175,30 @@ describe('PATCH /api/reviews/:review_id', () => {
     });
 });
 
+describe.only('GET /api/reviews/:review_id/comments', () => {
+    it('returns 200 status code with array of comments for relevant review_id', () => {
+        return request(app)
+        .get('/api/reviews/2/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            expect(comments).toBeInstanceOf(Array)
+            expect(comments).toHaveLength(3)
+            comments.forEach(comment => {
+                expect(comment).toEqual({
+                    comment_id: expect.any(Number),
+                    votes: expect.any(Number),
+                    created_at: expect.any(String),
+                    author: expect.any(String),
+                    author: expect.any(String),
+                    body: expect.any(String),
+                    review_id: expect.any(Number)
+                })
+            })
+        })
+    });
+});
+
 describe('GET /api/users', () => {
     it('returns 200 status with array of all user objects each with properties username, name, avatar_url', () => {
         return request(app)

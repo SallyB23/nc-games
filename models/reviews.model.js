@@ -36,3 +36,14 @@ exports.updateReviewById = (id, updateInfo) => {
         }
     })
 }
+
+exports.fetchCommentsByReviewId = (id) => {
+    return db
+    .query(
+        `SELECT * FROM comments
+        WHERE review_id = $1`, [id]
+    )
+    .then(({ rows }) => {
+        return rows
+    })
+}
