@@ -48,9 +48,18 @@ describe.only('GET /api/reviews', () => {
                     votes: expect.any(Number),
                     review_body:expect.any(String),
                     designer: expect.any(String),
-                    comment_count: expect.any(String)
+                    comment_count: expect.any(Number)
                 })
             })
+        })
+    });
+    it('returns 200 and returns each review object by date descending order', () => {
+        return request(app)
+        .get('/api/reviews')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeSortedBy('created_at', {descending: true})
         })
     });
 });

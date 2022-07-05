@@ -23,11 +23,8 @@ exports.patchReviewById = (req, res, next) => {
     })
 }
 
-exports.getReviews = (req, res, next) => {
+exports.getReviews = (req, res) => {
     fetchReviews().then((reviews) => {
         res.status(200).send({ reviews })
-    })
-    .catch(err => {
-        console.log(err)
     })
 }
