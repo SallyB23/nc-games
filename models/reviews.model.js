@@ -47,6 +47,20 @@ exports.fetchCommentsByReviewId = (id) => {
     })
 }
 
+exports.newCommentForReviewId = (id, newComment) => {
+    const commentInfo = [newComment.body, id, newComment.username]
+    return db
+    .query(
+        `INSERT INTO comments
+        (body, review_id, author)
+        VALUES ($1, $2, $3)
+        RETURNING *`, commentInfo
+    )
+    .then(({ rows }) => {
+        return rows[0]
+    })
+}
+
 exports.fetchReviews = () => {
     return db
     .query(
