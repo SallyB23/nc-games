@@ -244,7 +244,6 @@ describe('GET /api/reviews/:review_id/comments', () => {
                     votes: expect.any(Number),
                     created_at: expect.any(String),
                     author: expect.any(String),
-                    author: expect.any(String),
                     body: expect.any(String),
                     review_id: expect.any(Number)
                 })
@@ -275,6 +274,82 @@ describe('GET /api/reviews/:review_id/comments', () => {
             const { comments } = body
             expect(comments).toBeInstanceOf(Array)
             expect(comments).toHaveLength(0)
+        })
+    });
+});
+
+describe('POST /api/reviews/:review_id/comments', () => {
+    it('returns 201 status code with new comment when passed valid request', () => {
+        const newComment = {
+            username: "dav3rid",
+            body: "Good soldiers follow orders"
+        }
+
+        return request(app)
+        .post('/api/reviews/5/comments')
+        .send(newComment)
+        .expect(201)
+        .then(({ body }) => {
+            const { comment } = body
+            expect(comment).toBeInstanceOf(Object)
+            expect(comment.comment_id).toBe(7)
+            expect(comment.votes).toBe(0)
+            expect(comment.author).toBe("dav3rid")
+            expect(comment.body).toBe("Good soldiers follow orders")
+            expect(comment.review_id).toBe(5)
+            expect(comment).toHaveProperty("created_at")
+        })
+    });
+    it('returns 400 with bad request message when given id that is of invalid type', () => {
+        const newComment = {
+            username: "dav3rid",
+            body: "Good soldiers follow orders"
+        }        
+        return request(app)
+        .post('/api/reviews/rex/comments')
+        .send(newComment)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 404 with not found message when given an id that doesn\'t exist', () => {
+        const newComment = {
+            username: "dav3rid",
+            body: "Good soldiers follow orders"
+        }
+        return request(app)
+        .post('/api/reviews/99/comments')
+        .send(newComment)
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("Resource not found")
+        })
+    });
+    it('returns 400 status with bad request message when passed a request with an invalid key', () => {
+        const newComment = {
+            user: "dav3rid",
+            body: "Good soldiers follow orders"
+        }
+        return request(app)
+        .post('/api/reviews/5/comments')
+        .send(newComment)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 401 error status with message of unauthorised if passed invalid username', () => {
+        const newComment = {
+            username: "Obi-Wan",
+            body: "Hello there"
+        }
+        return request(app)
+        .post('/api/reviews/5/comments')
+        .send(newComment)
+        .expect(401)
+        .then(({ body }) => {
+            expect(body.message).toBe("Unauthorised")
         })
     });
 });

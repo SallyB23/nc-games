@@ -1,7 +1,7 @@
 const express = require("express")
 const { getCategories } = require("./controllers/categories.controller")
 const { getUsers } = require("./controllers/users.controller")
-const { getReviewById, patchReviewById, getReviews, getCommentsByReviewId } = require("./controllers/reviews.controller");
+const { getReviewById, patchReviewById, getReviews, getCommentsByReviewId, postCommentToReviewId } = require("./controllers/reviews.controller");
 const { handleCustomErrors, handlePSQLErrors, unhandledErrors } = require("./errors/error-handling");
 
 const app = express()
@@ -15,6 +15,7 @@ app.get("/api/reviews/:review_id", getReviewById)
 app.patch("/api/reviews/:review_id", patchReviewById)
 
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewId)
+app.post("/api/reviews/:review_id/comments", postCommentToReviewId)
 
 app.get("/api/users", getUsers)
 

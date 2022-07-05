@@ -76,3 +76,30 @@ exports.fetchReviews = (query) => {
         return Promise.reject({status: 400, message: "Bad Request"})
     }
 }
+
+exports.newCommentForReviewId = (id, newComment) => {
+    const commentInfo = [newComment.body, id, newComment.username]
+    return db
+    .query(
+        `INSERT INTO comments
+        (body, review_id, author)
+        VALUES ($1, $2, $3)
+        RETURNING *`, commentInfo
+    )
+    .then(({ rows }) => {
+        return rows[0]
+    })
+}
+
+exports.fetchReviews = () => {
+    return db
+    .query(
+        `SELECT reviews.*, COUNT(comments.review_id)::int AS comment_count FROM reviews
+        LEFT JOIN comments ON comments.review_id = reviews.review_id
+        GROUP BY reviews.review_id
+        ORDER BY created_at DESC`
+    )
+    .then(({ rows }) => {
+        return rows
+    })
+}
