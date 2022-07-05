@@ -28,7 +28,7 @@ describe('GET /api/categories', () => {
     });
 });
 
-describe.only('GET /api/reviews', () => {
+describe('GET /api/reviews', () => {
     it('return 200 status with an array of all reviews objects', () => {
         return request(app)
         .get('/api/reviews')
