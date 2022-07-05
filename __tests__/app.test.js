@@ -211,6 +211,56 @@ describe('PATCH /api/reviews/:review_id', () => {
     });
 });
 
+describe('GET /api/reviews/:review_id/comments', () => {
+    it('returns 200 status code with array of comments for relevant review_id', () => {
+        return request(app)
+        .get('/api/reviews/2/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            expect(comments).toBeInstanceOf(Array)
+            expect(comments).toHaveLength(3)
+            comments.forEach(comment => {
+                expect(comment).toEqual({
+                    comment_id: expect.any(Number),
+                    votes: expect.any(Number),
+                    created_at: expect.any(String),
+                    author: expect.any(String),
+                    author: expect.any(String),
+                    body: expect.any(String),
+                    review_id: expect.any(Number)
+                })
+            })
+        })
+    });    
+    it('returns 400 with bad request message when given id that is of invalid type', () => {
+        return request(app)
+        .get('/api/reviews/order/comments')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 404 with not found message when given an id that doesn\'t exist', () => {
+        return request(app)
+        .get('/api/reviews/66/comments')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("Resource not found")
+        })
+    });
+    it('returns 200 with an empty array if there are no comments for that id but the id exists', () => {
+        return request(app)
+        .get('/api/reviews/4/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            expect(comments).toBeInstanceOf(Array)
+            expect(comments).toHaveLength(0)
+        })
+    });
+});
+
 describe('GET /api/users', () => {
     it('returns 200 status with array of all user objects each with properties username, name, avatar_url', () => {
         return request(app)

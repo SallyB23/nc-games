@@ -15,7 +15,6 @@ exports.fetchReviewById = (id) => {
         } else {
             return Promise.reject({status: 404, message: "review_id not found"})
         }
-
     })
 }
 
@@ -34,6 +33,17 @@ exports.updateReviewById = (id, updateInfo) => {
         } else {
             return Promise.reject({status: 404, message: "review_id not found"})
         }
+    })
+}
+
+exports.fetchCommentsByReviewId = (id) => {
+    return db
+    .query(
+        `SELECT * FROM comments
+        WHERE review_id = $1`, [id]
+        )
+    .then(({ rows }) => {
+        return rows
     })
 }
 
