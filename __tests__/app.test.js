@@ -45,8 +45,18 @@ describe('GET /api/reviews/:review_id', () => {
                 votes: 7,
                 category: "social deduction",
                 owner: "mallionaire",
-                created_at: expect.any(String)
+                created_at: expect.any(String),
+                comment_count: expect.any(Number)
             })
+        })
+    });
+    it('return 200 status with a review object as a message with correct comment count', () => {
+        return request(app)
+        .get('/api/reviews/2')
+        .expect(200)
+        .then(({ body }) => {
+            const { review } = body
+            expect(review.comment_count).toBe(3)
         })
     });
     it('returns 404 status with a corresponding not found message when review_id doesn\'t exist', () => {
