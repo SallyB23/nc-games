@@ -28,7 +28,7 @@ describe('GET /api/categories', () => {
     });
 });
 
-describe('GET /api/reviews', () => {
+describe.only('GET /api/reviews', () => {
     it('return 200 status with an array of all reviews objects', () => {
         return request(app)
         .get('/api/reviews')
@@ -53,13 +53,31 @@ describe('GET /api/reviews', () => {
             })
         })
     });
-    it('returns 200 and returns each review object by date descending order', () => {
+    it('returns 200 and returns array of all review objects sorted by descending date order', () => {
         return request(app)
         .get('/api/reviews')
         .expect(200)
         .then(({ body }) => {
             const { reviews } = body
             expect(reviews).toBeSortedBy('created_at', {descending: true})
+        })
+    });
+    it('returns 200 and returns array of review objects sorted by descending votes', () => {
+        return request(app)
+        .get('/api/reviews?sort_by=votes')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeSortedBy('votes', {descending: true})
+        })
+    });
+    it('returns 200 and returns array of review objects sorted by descending title', () => {
+        return request(app)
+        .get('/api/reviews?sort_by=title')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeSortedBy('title', {descending: true, coerce: true})
         })
     });
 });

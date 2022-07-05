@@ -35,9 +35,13 @@ exports.getCommentsByReviewId = (req, res, next) => {
     })
 }
 
-
 exports.getReviews = (req, res) => {
-    fetchReviews().then((reviews) => {
+    const query = req.query
+    
+    fetchReviews(query).then((reviews) => {
         res.status(200).send({ reviews })
+    })
+    .catch(err => {
+        console.log(err)
     })
 }

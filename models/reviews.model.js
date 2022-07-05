@@ -47,15 +47,32 @@ exports.fetchCommentsByReviewId = (id) => {
     })
 }
 
-exports.fetchReviews = () => {
-    return db
-    .query(
-        `SELECT reviews.*, COUNT(comments.review_id)::int AS comment_count FROM reviews
-        LEFT JOIN comments ON comments.review_id = reviews.review_id
-        GROUP BY reviews.review_id
-        ORDER BY created_at DESC`
-    )
-    .then(({ rows }) => {
-        return rows
-    })
+exports.fetchReviews = (query) => {
+    const queries = Object.keys(query)
+    const hasSortOrder = queries.includes("order")
+
+    const validQueryOptions = ["sort_by", "category"]
+    const validSortOptions = ["created_at", "review_id", "title", "category", "designer", "owner", "votes"]
+
+    if (validQueryOptions.some(item => queries.includes(item)) || queries.length === 0 || hasSortOrder) {
+        let sortBy = "created_at"
+        if (queries.includes("sort_by")) sortBy = query.sort_by
+
+        if (validSortOptions.includes(sortBy)) {
+            return db
+            .query(
+                `SELECT reviews.*, COUNT(comments.review_id)::int AS comment_count FROM reviews
+                LEFT JOIN comments ON comments.review_id = reviews.review_id
+                GROUP BY reviews.review_id
+                ORDER BY ${sortBy} DESC`
+            )
+            .then(({ rows }) => {
+                return rows
+            })
+        } else {
+            return Promise.reject({status: 400, message: "Bad Request"})
+        }
+    } else {
+        return Promise.reject({status: 400, message: "Bad Request"})
+    }
 }
