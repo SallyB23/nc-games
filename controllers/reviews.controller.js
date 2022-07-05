@@ -35,7 +35,7 @@ exports.getCommentsByReviewId = (req, res, next) => {
     })
 }
 
-exports.postCommentToReviewId = (req, res) => {
+exports.postCommentToReviewId = (req, res, next) => {
     const { review_id } = req.params
     const newComment = req.body
     
@@ -43,7 +43,7 @@ exports.postCommentToReviewId = (req, res) => {
         res.status(201).send({ comment })
     })
     .catch(err => {
-        console.log(err)
+        next(err)
     })
 }
 
