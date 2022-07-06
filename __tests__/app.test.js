@@ -335,11 +335,27 @@ describe('POST /api/reviews/:review_id/comments', () => {
         })
     });
 });
-describe('DELETE /api/comments/:comment_id', () => {
+describe.only('DELETE /api/comments/:comment_id', () => {
     it('returns 204 with no content when comment_id is valid', () => {
         return request(app)
         .delete('/api/comments/5')
         .expect(204)
+    });
+    it('returns 400 with bad request message when given comment_id that is of incorrect type', () => {
+        return request(app)
+        .delete('/api/comments/frodo')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 404 with comment_id not found message when given comment_id of correct try but doesn\'t exist', () => {
+        return request(app)
+        .delete('/api/comments/421')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("comment_id not found")
+        })
     });
 });
 
