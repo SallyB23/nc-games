@@ -53,13 +53,117 @@ describe('GET /api/reviews', () => {
             })
         })
     });
-    it('returns 200 and returns each review object by date descending order', () => {
+    it('returns 200 and returns array of all review objects sorted by descending date order', () => {
         return request(app)
         .get('/api/reviews')
         .expect(200)
         .then(({ body }) => {
             const { reviews } = body
             expect(reviews).toBeSortedBy('created_at', {descending: true})
+        })
+    });
+    it('returns 200 and returns array of review objects sorted by descending votes', () => {
+        return request(app)
+        .get('/api/reviews?sort_by=votes')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeSortedBy('votes', {descending: true})
+        })
+    });
+    it('returns 200 and returns array of review objects sorted by descending title', () => {
+        return request(app)
+        .get('/api/reviews?sort_by=title')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeSortedBy('title', {descending: true, coerce: true})
+        })
+    });
+    it('returns 200 with all reviews in descending created_at order when passed invalid query type', () => {
+        return request(app)
+        .get('/api/reviews?sort=title')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toHaveLength(13)
+            expect(reviews).toBeSortedBy('created_at', {descending: true})
+        })
+    });
+    it('returns 200 with all reviews in descending created_at order when passed invalid sort_by option', () => {
+        return request(app)
+        .get('/api/reviews?sort=title')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toHaveLength(13)
+            expect(reviews).toBeSortedBy('created_at', {descending: true})
+        })
+    });
+    it('returns 200 with array object in ascending order when passed as query', () => {
+        return request(app)
+        .get('/api/reviews?order=asc')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeSortedBy('created_at')
+        })
+    });
+    it('returns 200 status and ignores any order query value other than asc and defaults to desc', () => {
+        return request(app)
+        .get('/api/reviews?order=66')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeSortedBy('created_at', {descending: true})
+        })
+    });
+    it('returns 200 status with filtered array of review objects based on category filter query', () => {
+        return request(app)
+        .get('/api/reviews?category=dexterity')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeInstanceOf(Array)
+            expect(reviews).toHaveLength(1)
+            expect(reviews[0].category).toBe('dexterity')
+        })
+    });
+    it('returns 404 with bad request message when given an invalid category to filter by', () => {
+        return request(app)
+        .get('/api/reviews?category=cheese')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("Resource not found")
+        })
+    });
+    it('returns 200 with an empty array when given valid category but there are no results when filtered', () => {
+        return request(app)
+        .get('/api/reviews?category=children\'s games')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toBeInstanceOf(Array)
+            expect(reviews).toHaveLength(0)
+        })
+    })
+    it('returns 200 with array list filtered by category, in ascending votes order', () => {
+        return request(app)
+        .get('/api/reviews?category=social+deduction&&order=asc&&sort_by=votes')
+        .expect(200)
+        .then(({ body }) => {
+            const{ reviews } = body
+            expect(reviews).toHaveLength(11)
+            expect(reviews).toBeSortedBy('votes')
+        })
+    });
+    it('returns 200 with all reviews and ignores SQL injection code', () => {
+        return request(app)
+        .get('/api/reviews?sort_by=title;+SELECT+*+FROM+users')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toHaveLength(13)
         })
     });
 });
