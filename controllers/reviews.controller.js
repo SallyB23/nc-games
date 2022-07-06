@@ -1,3 +1,4 @@
+const categories = require("../db/data/test-data/categories")
 const { checkExists } = require("../models/model-utils")
 const { newCommentForReviewId, fetchReviewById, updateReviewById, fetchReviews, fetchCommentsByReviewId } = require("../models/reviews.model")
 
@@ -47,8 +48,18 @@ exports.postCommentToReviewId = (req, res, next) => {
     })
 }
 
-exports.getReviews = (req, res) => {
-    fetchReviews().then((reviews) => {
+exports.getReviews = (req, res, next) => {
+    const query = req.query
+    const promises = [fetchReviews(query)]
+    
+    if (query.category !== undefined) {
+        promises.push(checkExists("categories", "slug", query.category))
+    }
+
+    Promise.all(promises).then(([ reviews] ) => {
         res.status(200).send({ reviews })
+    })
+    .catch(err => {
+        next(err)
     })
 }
