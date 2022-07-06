@@ -1,8 +1,8 @@
 const express = require("express")
 const { getCategories } = require("./controllers/categories.controller")
 const { getUsers } = require("./controllers/users.controller")
-const { getReviewById, patchReviewById, getReviews, getCommentsByReviewId, postCommentToReviewId } = require("./controllers/reviews.controller");
-const { deleteCommentById } = require("./controllers/comments.controller")
+const { getReviewById, patchReviewById, getReviews } = require("./controllers/reviews.controller");
+const { getCommentsByReviewId, postCommentToReviewId, deleteCommentById } = require("./controllers/comments.controller")
 const { handleCustomErrors, handlePSQLErrors, unhandledErrors } = require("./errors/error-handling");
 
 const app = express()

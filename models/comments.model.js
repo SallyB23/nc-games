@@ -1,7 +1,31 @@
 const db = require("../db/connection")
 
+exports.fetchCommentsByReviewId = (id) => {
+    return db
+    .query(
+        `SELECT * FROM comments
+        WHERE review_id = $1`, [id]
+        )
+    .then(({ rows }) => {
+        return rows
+    })
+}
+
+exports.newCommentForReviewId = (id, newComment) => {
+    const commentInfo = [newComment.body, id, newComment.username]
+    return db
+    .query(
+        `INSERT INTO comments
+        (body, review_id, author)
+        VALUES ($1, $2, $3)
+        RETURNING *`, commentInfo
+    )
+    .then(({ rows }) => {
+        return rows[0]
+    })
+}
+
 exports.removeCommentById = (id) => {
-    console.log(id)
     return db
     .query(`
         DELETE FROM comments

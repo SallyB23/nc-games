@@ -335,7 +335,7 @@ describe('POST /api/reviews/:review_id/comments', () => {
         })
     });
 });
-describe.only('DELETE /api/comments/:comment_id', () => {
+describe('DELETE /api/comments/:comment_id', () => {
     it('returns 204 with no content when comment_id is valid', () => {
         return request(app)
         .delete('/api/comments/5')
