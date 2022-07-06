@@ -147,6 +147,25 @@ describe('GET /api/reviews', () => {
             expect(reviews).toHaveLength(0)
         })
     })
+    it('returns 200 with array list filtered by category, in ascending votes order', () => {
+        return request(app)
+        .get('/api/reviews?category=social+deduction&&order=asc&&sort_by=votes')
+        .expect(200)
+        .then(({ body }) => {
+            const{ reviews } = body
+            expect(reviews).toHaveLength(11)
+            expect(reviews).toBeSortedBy('votes')
+        })
+    });
+    it('returns 200 with all reviews and ignores SQL injection code', () => {
+        return request(app)
+        .get('/api/reviews?sort_by=title;+SELECT+*+FROM+users')
+        .expect(200)
+        .then(({ body }) => {
+            const { reviews } = body
+            expect(reviews).toHaveLength(13)
+        })
+    });
 });
 
 describe('GET /api/reviews/:review_id', () => {
