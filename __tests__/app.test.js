@@ -335,6 +335,13 @@ describe('POST /api/reviews/:review_id/comments', () => {
         })
     });
 });
+describe('DELETE /api/comments/:comment_id', () => {
+    it('returns 204 with no content when comment_id is valid', () => {
+        return request(app)
+        .delete('/api/comments/5')
+        .expect(204)
+    });
+});
 
 describe('GET /api/users', () => {
     it('returns 200 status with array of all user objects each with properties username, name, avatar_url', () => {
