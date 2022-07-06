@@ -37,6 +37,18 @@ exports.updateReviewById = (id, updateInfo) => {
     });
 };
 
+exports.fetchReviews = () => {
+    return db
+    .query(
+        `SELECT reviews.*, COUNT(comments.review_id)::int AS comment_count FROM reviews
+        LEFT JOIN comments ON comments.review_id = reviews.review_id
+        GROUP BY reviews.review_id
+        ORDER BY created_at DESC`
+    )
+    .then(({ rows }) => {
+        return rows
+    })
+}
 exports.fetchCommentsByReviewId = (id) => {
   return db
     .query(
