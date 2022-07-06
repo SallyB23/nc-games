@@ -24,29 +24,6 @@ exports.patchReviewById = (req, res, next) => {
     })
 }
 
-// exports.getCommentsByReviewId = (req, res, next) => {
-//     const { review_id } = req.params
-
-//     Promise.all([fetchCommentsByReviewId(review_id), checkExists("reviews", "review_id", review_id)]).then(([ comments ]) => {
-//         res.status(200).send({ comments })
-//     })
-//     .catch(err => {
-//         next(err)
-//     })
-// }
-
-// exports.postCommentToReviewId = (req, res, next) => {
-//     const { review_id } = req.params
-//     const newComment = req.body
-    
-//     newCommentForReviewId(review_id, newComment).then((comment) => {
-//         res.status(201).send({ comment })
-//     })
-//     .catch(err => {
-//         next(err)
-//     })
-// }
-
 exports.getReviews = (req, res, next) => {
     const query = req.query
     const promises = [fetchReviews(query)]

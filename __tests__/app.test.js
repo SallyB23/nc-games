@@ -2,7 +2,8 @@ const request = require("supertest");
 const app = require("../app")
 const db = require("../db/data/test-data/index")
 const seed = require("../db/seeds/seed")
-const connection = require("../db/connection")
+const connection = require("../db/connection");
+const { parse } = require("dotenv");
 
 beforeEach(() => seed(db));
 afterAll(() => connection.end());
@@ -492,6 +493,33 @@ describe('handling incorrect path errors', () => {
         .expect(404)
         .then(({ body }) => {
             expect(body.message).toBe("path not found")
+        })
+    });
+});
+
+describe('GET /api', () => {
+    it('returns 200 status and a JSON object with information on api endpoints ', () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({ body }) => {
+            const { endpoints } = body
+            const parsedEndpoints = JSON.parse(endpoints)
+            const endpointKeys = Object.keys(parsedEndpoints)
+            const expectedEndpoints = [
+                "GET /api",
+                "GET /api/categories",
+                "GET /api/reviews",
+                "GET /api/reviews/:review_id",
+                "PATCH /api/reviews/:review_id",
+                "GET /api/reviews/:review_id/comments",
+                "POST /api/reviews/:review_id/comments",
+                "DELETE /api/comments/:comment_id",
+                "GET /api/users"
+            ]
+            expect(parsedEndpoints).toBeInstanceOf(Object)
+            expect(endpointKeys).toHaveLength(9)
+            expect(endpointKeys).toEqual(expectedEndpoints)
         })
     });
 });
