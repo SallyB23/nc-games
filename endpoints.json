@@ -50,7 +50,7 @@
     }
   },
   "PATCH /api/reviews/:review_id": {
-    "description": "updates the votes by desired number on a review, by review_id, returning updated review",
+    "description": "updates the votes of a review by given number returning updated review",
     "queries": [],
     "exampleRequestBody": {"inc_votes": 10},
     "exampleResponse": {
@@ -85,7 +85,7 @@
     }
   },
   "POST /api/reviews/:review_id/comments": {
-    "description": "adds a new comment to a review based on the review_id and returns new comment",
+    "description": "adds a new comment to a review and returns new comment",
     "queries": [],
     "exampleRequestBody": {
       "username": "dav3rid",
