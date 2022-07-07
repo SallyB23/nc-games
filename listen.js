@@ -2,7 +2,7 @@ const app = require("./app")
 
 const { PORT = 9090 } = process.env
 
-app.listen(port, (err) => {
+app.listen((err) => {
   if (err) {
     throw err;
   } else {
