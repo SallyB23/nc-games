@@ -3,10 +3,13 @@ const { getCategories } = require("./controllers/categories.controller")
 const { getUsers } = require("./controllers/users.controller")
 const { getReviewById, patchReviewById, getReviews } = require("./controllers/reviews.controller");
 const { getCommentsByReviewId, postCommentToReviewId, deleteCommentById } = require("./controllers/comments.controller")
+const { getEndpoints } = require("./controllers/api.controller")
 const { handleCustomErrors, handlePSQLErrors, unhandledErrors } = require("./errors/error-handling");
 
 const app = express()
 app.use(express.json())
+
+app.get("/api", getEndpoints)
 
 app.get("/api/categories", getCategories);
 
