@@ -504,8 +504,7 @@ describe('GET /api', () => {
         .expect(200)
         .then(({ body }) => {
             const { endpoints } = body
-            const parsedEndpoints = JSON.parse(endpoints)
-            const endpointKeys = Object.keys(parsedEndpoints)
+            const endpointKeys = Object.keys(endpoints)
             const expectedEndpoints = [
                 "GET /api",
                 "GET /api/categories",
@@ -517,7 +516,7 @@ describe('GET /api', () => {
                 "DELETE /api/comments/:comment_id",
                 "GET /api/users"
             ]
-            expect(parsedEndpoints).toBeInstanceOf(Object)
+            expect(endpoints).toBeInstanceOf(Object)
             expect(endpointKeys).toHaveLength(9)
             expect(endpointKeys).toEqual(expectedEndpoints)
         })
