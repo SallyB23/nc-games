@@ -1,8 +1,8 @@
 const express = require("express")
-const { getCategories } = require("./controllers/categories.controller")
-const { getUsers } = require("./controllers/users.controller")
-const { getReviewById, patchReviewById, getReviews } = require("./controllers/reviews.controller");
-const { getCommentsByReviewId, postCommentToReviewId, deleteCommentById } = require("./controllers/comments.controller")
+const categoryRouter = require("./routes/category-router")
+const reviewsRouter = require("./routes/reviews-router")
+const commentsRouter = require("./routes/comments-router")
+const usersRouter = require("./routes/users-router")
 const { getEndpoints } = require("./controllers/api.controller")
 const { handleCustomErrors, handlePSQLErrors, unhandledErrors } = require("./errors/error-handling");
 
@@ -11,19 +11,10 @@ app.use(express.json())
 
 app.get("/api", getEndpoints)
 
-app.get("/api/categories", getCategories);
-
-app.get("/api/reviews", getReviews)
-
-app.get("/api/reviews/:review_id", getReviewById)
-app.patch("/api/reviews/:review_id", patchReviewById)
-
-app.get("/api/reviews/:review_id/comments", getCommentsByReviewId)
-app.post("/api/reviews/:review_id/comments", postCommentToReviewId)
-
-app.delete("/api/comments/:comment_id", deleteCommentById)
-
-app.get("/api/users", getUsers)
+app.use("/api/categories", categoryRouter)
+app.use("/api/reviews", reviewsRouter)
+app.use("/api/comments", commentsRouter)
+app.use("/api/users", usersRouter)
 
 app.get("*", (req, res) => {
     res.status(404).send({ message: "path not found"})
