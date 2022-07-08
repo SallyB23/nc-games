@@ -464,6 +464,104 @@ describe('DELETE /api/comments/:comment_id', () => {
     });
 });
 
+describe('PATCH /api/comments/comment_id', () => {
+    it('returns 200 status code with the number of votes increased in the updated object', () => {
+        const voteUpdate = {
+            inc_votes: 10
+        }
+        return request(app)
+        .patch('/api/comments/2')
+        .send(voteUpdate)
+        .expect(200)
+        .then(({ body }) => {
+            const { comment } = body
+            expect(comment).toBeInstanceOf(Object)
+            expect(comment.comment_id).toBe(2)
+            expect(comment.body).toBe("My dog loved this game too!")
+            expect(comment.votes).toBe(23)
+        })
+    });
+    it('returns 200 status code with the number of votes decreased in the updated object if the new vote number passed is a minus number', () => {
+        const voteUpdate = {
+            inc_votes: -23
+        }
+        return request(app)
+        .patch('/api/comments/2')
+        .send(voteUpdate)
+        .expect(200)
+        .then(({ body }) => {
+            const { comment } = body
+            expect(comment).toBeInstanceOf(Object)
+            expect(comment.votes).toBe(-10)
+        })
+    });
+    it('returns 404 status with a corresponding not found message when passed _id ot of range', () => {
+        const voteUpdate = {
+            inc_votes: -23
+        }
+        return request(app)
+        .patch('/api/comments/299')
+        .send(voteUpdate)
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("comment_id not found")
+        })
+    });
+    it('returns 400 status with a corresponding bad request message when passed review_id of invaild type', () => {
+        const voteUpdate = {
+            inc_votes: -23
+        }
+        return request(app)
+        .patch('/api/comments/banana')
+        .send(voteUpdate)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })   
+    });
+    it('returns 400 status with a corresponding bad request message when sent an incorrect key in sent object', () => {
+        const voteUpdate = {
+            votes: 10
+        }
+        return request(app)
+        .patch('/api/comments/2')
+        .send(voteUpdate)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 400 status with a corresponding bad request message when sent an object with an invalid value', () => {
+        const voteUpdate = {
+            inc_votes: "ten"
+        }
+        return request(app)
+        .patch('/api/comments/2')
+        .send(voteUpdate)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 200 status code with the number of votes changed ignoring any other information passed in the object', () => {
+        const voteUpdate = {
+            inc_votes: 10,
+            title: "Hello there..."
+        }
+        return request(app)
+        .patch('/api/comments/2')
+        .send(voteUpdate)
+        .expect(200)
+        .then(({ body }) => {
+            const { comment } = body
+            expect(comment).toBeInstanceOf(Object)
+            expect(comment.comment_id).toBe(2)
+            expect(comment.body).toBe("My dog loved this game too!")
+            expect(comment.votes).toBe(23)
+        })
+    });
+})
+
 describe('GET /api/users', () => {
     it('returns 200 status with array of all user objects each with properties username, name, avatar_url', () => {
         return request(app)
