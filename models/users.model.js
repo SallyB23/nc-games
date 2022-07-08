@@ -15,6 +15,10 @@ exports.fetchUserByUsername = (username) => {
         WHERE username = $1`, [username]
     )
     .then(({ rows }) => {
-        return rows[0]
+        if (rows.length !== 0) {
+           return rows[0] 
+        } else {
+            return Promise.reject({status: 404, message: "username not found"})
+        }
     })
 }

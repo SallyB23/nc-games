@@ -500,6 +500,14 @@ describe('GET api/users/:username', () => {
             })  
         });
     })
+    it('returns 404 status with a corresponding not found message when username doesn\'t exist', () => {
+        return request(app)
+        .get('/api/users/padme')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("username not found")
+        })
+    });
 });
 
 describe('handling incorrect path errors', () => {
