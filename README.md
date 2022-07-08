@@ -68,6 +68,8 @@ serves up an array of all categories
 
 ```/api/users/``` serves up an array of users
 
+```/api/users/:username``` serves up json object of a user
+
 <br>
 
 ### POST request endpoints

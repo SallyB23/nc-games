@@ -118,6 +118,17 @@
         }
       ]
     }
+  },
+  "GET /api/users/:username": {
+    "description": "serves a json object of a user based on the username",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "username": "philippaclaire9",
+        "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+        "name": "philippa"
+      }
+    }
   }
 }
 
