@@ -473,7 +473,6 @@ describe('PATCH /api/comments/comment_id', () => {
         .send(voteUpdate)
         .expect(200)
         .then(({ body }) => {
-            console.log(body)
             const { comment } = body
             expect(comment).toBeInstanceOf(Object)
             expect(comment.comment_id).toBe(2)
@@ -638,9 +637,10 @@ describe('GET /api', () => {
                 "PATCH /api/comments/:comment_id",
                 "DELETE /api/comments/:comment_id",
                 "GET /api/users",
+                "GET /api/users/:username"
             ]
             expect(endpoints).toBeInstanceOf(Object)
-            expect(endpointKeys).toHaveLength(10)
+            expect(endpointKeys).toHaveLength(11)
             expect(endpointKeys).toEqual(expectedEndpoints)
         })
     });
