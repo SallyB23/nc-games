@@ -486,6 +486,22 @@ describe('GET /api/users', () => {
     })
 })
 
+describe('GET api/users/:username', () => {
+    it('returns 200 with user based on username', () => {
+        return request(app)
+        .get('/api/users/philippaclaire9')
+        .expect(200)
+        .then(({ body }) => {
+            const { user } = body
+            expect(user).toEqual({
+                username: "philippaclaire9",
+                avatar_url: "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+                name: "philippa"
+            })  
+        });
+    })
+});
+
 describe('handling incorrect path errors', () => {
     it('returns 404 status with path not found error message when an incorrect path is input', () => {
         return request(app)
