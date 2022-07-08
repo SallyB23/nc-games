@@ -82,6 +82,18 @@ serves up an array of all categories
     "body": "I disagree, I hated this game"
 }
 ```
+```/api/reviews``` posts a new review
+
+*Example POST request body*
+```js
+{
+            owner: "bainesface",
+            title: "Great game!",
+            review_body: "It was a great game, loved it",
+            designer: "Anakin Skywalker",
+            category: "dexterity"
+}
+```
 <br>
 
 ### PATCH request endpoints

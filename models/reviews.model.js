@@ -113,3 +113,18 @@ exports.newCommentForReviewId = (id, newComment) => {
       return rows[0];
     });
 };
+
+exports.newReview = (newReview) => {
+  const reviewInfo = [newReview.owner, newReview.title, newReview.review_body, newReview.designer, newReview.category]
+  return db
+    .query(
+      `INSERT INTO reviews
+      (title, category, designer, owner, review_body)
+      VALUES ($2, $5, $4, $1, $3)
+      RETURNING *`, reviewInfo
+    )
+    .then(({ rows }) => {
+      rows[0]["comment_count"] = 0
+      return rows[0]
+    })
+}

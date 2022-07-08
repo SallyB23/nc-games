@@ -1,4 +1,4 @@
-const {fetchReviewById, updateReviewById, fetchReviews} = require("../models/reviews.model")
+const {fetchReviewById, updateReviewById, fetchReviews, newReview} = require("../models/reviews.model")
 const { checkExists } = require("../models/model-utils")
 
 exports.getReviewById = (req, res, next) => {
@@ -34,6 +34,17 @@ exports.getReviews = (req, res, next) => {
 
     Promise.all(promises).then(([ reviews] ) => {
         res.status(200).send({ reviews })
+    })
+    .catch(err => {
+        next(err)
+    })
+}
+
+exports.postReview = (req, res, next) => {
+    const newReviewInfo = req.body
+
+    newReview(newReviewInfo).then((review) => {
+        res.status(201).send({ review })
     })
     .catch(err => {
         next(err)

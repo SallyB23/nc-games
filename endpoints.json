@@ -31,6 +31,31 @@
       ]
     }
   },
+  "POST /api/reviews": {
+    "description": "adds a new review",
+    "queries": [],
+    "exampleRequestBody": {
+      "owner": "bainesface",
+      "title": "Great game!",
+      "review_body": "It was a great game, loved it",
+      "designer": "Anakin Skywalker",
+      "category": "dexterity"
+  },
+    "exampleResponse": {
+      "comment": {
+        "review_id": 14,
+        "owner": "bainesface",
+        "title": "Great game!",
+        "review_body": "It was a great game, loved it",
+        "designer": "Anakin Skywalker",
+        "category": "dexterity",
+        "votes": 0,
+        "comment_count": 0,
+        "created_at": "2021-01-18T10:01:41.251Z",
+        "review_img_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+      }
+    }
+  },
   "GET /api/reviews/:review_id": {
     "description": "serves a json object of a review based on the review_id",
     "queries": [],

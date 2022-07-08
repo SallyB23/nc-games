@@ -17,7 +17,9 @@ exports.handlePSQLErrors = (err, req, res, next) => {
         if(err.detail.includes('table "users"')) {
             res.status(401).send({message: "Unauthorised"})
         }
-
+        if(err.detail.includes('table "categories"')){
+            res.status(404).send({message: "Category not found"})
+        }
     } else {
         next(err)
     }

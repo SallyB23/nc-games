@@ -168,6 +168,100 @@ describe('GET /api/reviews', () => {
     });
 });
 
+describe('POST /api/reviews', () => {
+    it('returns 200 with the new review post when passed valid request', () => {
+        const newReview = {
+            owner: "bainesface",
+            title: "I killed them, I killed them all",
+            review_body: "And not just the men, but the women and children too",
+            designer: "Anakin Skywalker",
+            category: "dexterity"
+        }
+        return request(app)
+        .post('/api/reviews')
+        .send(newReview)
+        .expect(201)
+        .then(({ body }) => {
+            const { review } = body
+            expect(review).toEqual({
+                    review_id: 14,
+                    owner: "bainesface",
+                    title: "I killed them, I killed them all",
+                    review_body: "And not just the men, but the women and children too", 
+                    designer: "Anakin Skywalker",
+                    category: "dexterity",
+                    votes: 0,
+                    comment_count: 0,
+                    created_at: expect.any(String),
+                    review_img_url: expect.any(String)
+            })
+        })
+    });
+    it('returns 400 status with bad request message when passed a request with an invalid key', () => {
+        const newReview = {
+            owner: "bainesface",
+            title_review: "I killed them, I killed them all",
+            review_body: "And not just the men, but the women and children too",
+            designer: "Anakin Skywalker",
+            category: "dexterity"
+        }
+        return request(app)
+        .post('/api/reviews')
+        .send(newReview)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 401 error status with message of unauthorised if passed invalid owner', () => {
+        const newReview = {
+            owner: "Padme4Life",
+            title: "I killed them, I killed them all",
+            review_body: "And not just the men, but the women and children too",
+            designer: "Anakin Skywalker",
+            category: "dexterity"
+        }
+        return request(app)
+        .post('/api/reviews')
+        .send(newReview)
+        .expect(401)
+        .then(({ body }) => {
+            expect(body.message).toBe("Unauthorised")
+        })
+    });
+    it('returns 400 error status with message of bad request if passed invalid category', () => {
+        const newReview = {
+            owner: "bainesface",
+            title: "I killed them, I killed them all",
+            review_body: "And not just the men, but the women and children too",
+            designer: "Anakin Skywalker",
+            category: "world domination"
+        }
+        return request(app)
+        .post('/api/reviews')
+        .send(newReview)
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.message).toBe("Category not found")
+        })
+    });
+    it('returns 400 status with bad request message when ot enough information is given', () => {
+        const newReview = {
+            owner: "bainesface",
+            title_review: "I killed them, I killed them all",
+            review_body: "And not just the men, but the women and children too",
+            designer: "Anakin Skywalker",
+        }
+        return request(app)
+        .post('/api/reviews')
+        .send(newReview)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+});
+
 describe('GET /api/reviews/:review_id', () => {
     it('return 200 status with a review object as a message', () => {
         return request(app)
@@ -630,6 +724,7 @@ describe('GET /api', () => {
                 "GET /api",
                 "GET /api/categories",
                 "GET /api/reviews",
+                "POST /api/reviews",
                 "GET /api/reviews/:review_id",
                 "PATCH /api/reviews/:review_id",
                 "GET /api/reviews/:review_id/comments",
@@ -637,10 +732,10 @@ describe('GET /api', () => {
                 "PATCH /api/comments/:comment_id",
                 "DELETE /api/comments/:comment_id",
                 "GET /api/users",
-                "GET /api/users/:username"
+                "GET /api/users/:username",
             ]
             expect(endpoints).toBeInstanceOf(Object)
-            expect(endpointKeys).toHaveLength(11)
+            expect(endpointKeys).toHaveLength(12)
             expect(endpointKeys).toEqual(expectedEndpoints)
         })
     });
