@@ -102,6 +102,21 @@
         }
     }
   },
+  "PATCH /api/comments/:comment_id": {
+    "description": "updates the votes of a comment by given number returning updated comment",
+    "queries": [],
+    "exampleRequestBody": {"inc_votes": 10},
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 2,
+        "body": "My dog loved this game too!",
+        "review_id": 3,
+        "author":" mallionaire",
+        "votes": 23,
+        "created_at": "2021-01-18T10:09:05.410Z"
+      }
+    }
+  },
   "DELETE /api/comments/:comment_id": {
     "description": "deletes comment by comment_id",
     "queries": []

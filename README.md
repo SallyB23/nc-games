@@ -85,6 +85,8 @@ serves up an array of all categories
 ### PATCH request endpoints
 ```/api/reviews/:review_id``` updates the votes on a review returning the updated review
 
+```/api/comments/:comment_id``` updates the votes on a comment returning the updated comment
+
 *Example PATCH request body*
 ```js
 {"inc_votes": 10}

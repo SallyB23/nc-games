@@ -3,7 +3,6 @@ const app = require("../app")
 const db = require("../db/data/test-data/index")
 const seed = require("../db/seeds/seed")
 const connection = require("../db/connection");
-const { parse } = require("dotenv");
 
 beforeEach(() => seed(db));
 afterAll(() => connection.end());
@@ -474,6 +473,7 @@ describe('PATCH /api/comments/comment_id', () => {
         .send(voteUpdate)
         .expect(200)
         .then(({ body }) => {
+            console.log(body)
             const { comment } = body
             expect(comment).toBeInstanceOf(Object)
             expect(comment.comment_id).toBe(2)
@@ -635,11 +635,12 @@ describe('GET /api', () => {
                 "PATCH /api/reviews/:review_id",
                 "GET /api/reviews/:review_id/comments",
                 "POST /api/reviews/:review_id/comments",
+                "PATCH /api/comments/:comment_id",
                 "DELETE /api/comments/:comment_id",
-                "GET /api/users"
+                "GET /api/users",
             ]
             expect(endpoints).toBeInstanceOf(Object)
-            expect(endpointKeys).toHaveLength(9)
+            expect(endpointKeys).toHaveLength(10)
             expect(endpointKeys).toEqual(expectedEndpoints)
         })
     });
