@@ -5,8 +5,11 @@ const commentsRouter = require("./routes/comments-router")
 const usersRouter = require("./routes/users-router")
 const { getEndpoints } = require("./controllers/api.controller")
 const { handleCustomErrors, handlePSQLErrors, unhandledErrors } = require("./errors/error-handling");
+const cors = require("cors");
 
 const app = express()
+
+app.use(cors())
 app.use(express.json())
 
 app.get("/api", getEndpoints)
