@@ -69,6 +69,7 @@ exports.fetchReviews = (query) => {
     "designer",
     "owner",
     "votes",
+    "comment_count"
   ];
 
   let sortBy = "created_at";
