@@ -701,6 +701,56 @@ describe('GET api/users/:username', () => {
     });
 });
 
+describe('POST api/users/', () => {
+    it('returns 201 with new user when passed valid request', () => {
+        const newUser = {
+            username: "WednesdayCat",
+            avatar_url: "https://store.playstation.com/store/api/chihiro/00_09_000/container/BG/en/99/EP5823-CUSA16329_00-AV00000000000004/0/image?_version=00_09_000&platform=chihiro&bg_color=000000&opacity=100&w=360&h=360",
+            name: "sally"
+        }
+        
+        return request(app)
+        .post('/api/users')
+        .send(newUser)
+        .expect(201)
+        .then(({ body }) => {
+            const { user } = body
+            expect(user).toEqual({
+                username: "WednesdayCat",
+                avatar_url: "https://store.playstation.com/store/api/chihiro/00_09_000/container/BG/en/99/EP5823-CUSA16329_00-AV00000000000004/0/image?_version=00_09_000&platform=chihiro&bg_color=000000&opacity=100&w=360&h=360",
+                name: "sally"
+            })
+        })
+    });
+    it('returns 400 status with bad request message when passed a request with an invalid key', () => {
+        const newUser = {
+            user: "WednesdayCat",
+            avatar_url: "https://store.playstation.com/store/api/chihiro/00_09_000/container/BG/en/99/EP5823-CUSA16329_00-AV00000000000004/0/image?_version=00_09_000&platform=chihiro&bg_color=000000&opacity=100&w=360&h=360",
+            name: "sally"
+        }
+        return request(app)
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+    it('returns 400 status with bad request message when ot enough information is given', () => {
+        const newUser = {
+            username: "WednesdayCat",
+            avatar_url: "https://store.playstation.com/store/api/chihiro/00_09_000/container/BG/en/99/EP5823-CUSA16329_00-AV00000000000004/0/image?_version=00_09_000&platform=chihiro&bg_color=000000&opacity=100&w=360&h=360",
+        }
+        return request(app)
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("Bad Request")
+        })
+    });
+})
+
 describe('handling incorrect path errors', () => {
     it('returns 404 status with path not found error message when an incorrect path is input', () => {
         return request(app)

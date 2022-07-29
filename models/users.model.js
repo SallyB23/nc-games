@@ -22,3 +22,17 @@ exports.fetchUserByUsername = (username) => {
         }
     })
 }
+
+exports.newUser = (newUser) => {
+    const userInfo = [newUser.username, newUser.avatar_url, newUser.name]
+    return db
+      .query(
+        `INSERT INTO users
+        (username, avatar_url, name)
+        VALUES ($1, $2, $3)
+        RETURNING *`, userInfo
+      )
+      .then(({ rows }) => {
+        return rows[0]
+      })
+}
