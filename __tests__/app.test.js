@@ -749,6 +749,20 @@ describe('POST api/users/', () => {
             expect(body.message).toBe("Bad Request")
         })
     });
+    it('returns 400 status with message when passed a username already in use', () => {
+        const newUser = {
+            username: "philippaclaire9",
+            avatar_url: "https://store.playstation.com/store/api/chihiro/00_09_000/container/BG/en/99/EP5823-CUSA16329_00-AV00000000000004/0/image?_version=00_09_000&platform=chihiro&bg_color=000000&opacity=100&w=360&h=360",
+            name: "sally"
+        }
+        return request(app)
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe("That username already exists, please try another")
+        })
+    });
 })
 
 describe('handling incorrect path errors', () => {
