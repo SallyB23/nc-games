@@ -783,9 +783,10 @@ describe('GET /api', () => {
                 "DELETE /api/comments/:comment_id",
                 "GET /api/users",
                 "GET /api/users/:username",
+                "POST /api/users"
             ]
             expect(endpoints).toBeInstanceOf(Object)
-            expect(endpointKeys).toHaveLength(12)
+            expect(endpointKeys).toHaveLength(13)
             expect(endpointKeys).toEqual(expectedEndpoints)
         })
     });

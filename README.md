@@ -94,6 +94,16 @@ serves up an array of all categories
             category: "dexterity"
 }
 ```
+```/api/users``` posts a new user to users, returning the new user.
+
+*Example POST user body*
+```js
+{
+    username: "Order66",
+    name: "rex"
+    avatar_url: "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
+}
+```
 <br>
 
 ### PATCH request endpoints
